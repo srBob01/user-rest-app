@@ -1,0 +1,33 @@
+services:
+  kotlinapp:
+    container_name: kotlinapp
+    image: srbob01/kotlinapp/latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DB_URL: ${DB_URL}
+        PG_USER: ${PG_USER}
+        PG_PASSWORD: ${PG_PASSWORD}
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/postgres
+      PG_USER: postgres
+      PG_PASSWORD: 112004
+    depends_on:
+      - db
+  db:
+    container_name: db
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 112004
+      POSTGRES_DB: postgres
+    volumes:
+      - data:/var/lib/postgresql/data
+
+volumes:
+  data: { }
